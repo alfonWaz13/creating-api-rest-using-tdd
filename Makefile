@@ -23,10 +23,6 @@ install: pre-requirements ## Install the app packages
 update: pre-requirements ## Updates the app packages
 	uv lock --upgrade
 
-.PHONY: add-package
-add-package: pre-requirements ## Installs a new package in the app. ex: make install package=XXX
-	uv add $(package)
-
 .PHONY: run
 run: pre-requirements ## Runs the app in production mode
 	uv run fastapi run
@@ -53,9 +49,9 @@ lint: pre-requirements ## Lints the code format
 format: pre-requirements  ## Format python code
 	uv run ruff format
 
-#.PHONY: test
-#test:  ## Run tests.
-#	uv run pytest tests -x -ra
+.PHONY: test
+test:  ## Run tests.
+	uv run pytest tests -x -ra
 
 .PHONY: pre-commit
-pre-commit: pre-requirements check-lint check-format check-typing
+pre-commit: pre-requirements check-lint check-format check-typing test
