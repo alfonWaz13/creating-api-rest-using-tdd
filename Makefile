@@ -54,4 +54,4 @@ test:  ## Run tests.
 	uv run pytest tests -x -ra
 
 .PHONY: pre-commit
-pre-commit: pre-requirements check-lint check-format check-typing test
+pre-commit: pre-requirements check-lint format check-typing test
