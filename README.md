@@ -1,0 +1,2 @@
+Proyecto para practicar la creación de APIs utilizando TDD.
+Estoy siguiendo los vídeos de [pmareke](https://github.com/pmareke/pmareke) publicados en [Youtube](https://www.youtube.com/watch?v=0J07x_uO7RE&list=PLsG63TbtJ1zu6H1Yh3tqmBbLTiPTQe4vD).
