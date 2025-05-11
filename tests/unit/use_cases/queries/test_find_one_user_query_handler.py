@@ -13,7 +13,7 @@ class TestFindOneUserQueryHandler:
     def test_find_one_user(self) -> None:
         mocked_user = UserMother.get()
         with Mimic(Stub, InMemoryUsersRepository) as users_repository:
-            users_repository.find_one(mocked_user.id).returns(mocked_user)
+            users_repository.find_by_id(mocked_user.id).returns(mocked_user)
             handler = FindOneUserQueryHandler(users_repository)
         query = FindOneUserQuery(mocked_user.id)
 

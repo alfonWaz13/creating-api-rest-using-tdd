@@ -19,5 +19,5 @@ class FindOneUserQueryHandler:
         self.users_repository = users_repository
 
     def execute(self, query: FindOneUserQuery) -> FindOneUserQueryResponse:
-        user = self.users_repository.find_one(user_id=query.user_id)
+        user = self.users_repository.find_by_id(user_id=query.user_id)
         return FindOneUserQueryResponse(user=user)

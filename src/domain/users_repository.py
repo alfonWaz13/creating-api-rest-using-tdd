@@ -9,3 +9,6 @@ class UsersRepository(ABC):
 
     @abstractmethod
     def find_all(self) -> list[User]: ...
+
+    @abstractmethod
+    def find_by_id(self, user_id: str) -> User: ...
