@@ -33,7 +33,7 @@ check-typing: pre-requirements  ## Run a static analyzer over the code to find i
 
 .PHONY: check-lint
 check-lint: pre-requirements ## Checks the code style
-	uv run ruff check
+	uv run ruff check --fix
 
 .PHONY: check-format
 check-format: pre-requirements  ## Check format python code
