@@ -7,9 +7,10 @@ class InMemoryUsersRepository(UsersRepository):
         self._users: dict[str, User] = {}
 
     def save(self, user: User) -> None:
-        self._users[user.name] = user
+        self._users[user.id] = user
 
     def find_all(self) -> list[User]:
         return list(self._users.values())
 
-    def find_by_id(self, user_id: str) -> None: ...
+    def find_by_id(self, user_id: str) -> User:
+        return self._users[user_id]
