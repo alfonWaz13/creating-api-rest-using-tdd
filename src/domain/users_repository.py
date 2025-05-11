@@ -6,3 +6,6 @@ from src.domain.user import User
 class UsersRepository(ABC):
     @abstractmethod
     def save(self, user: User) -> None: ...
+
+    @abstractmethod
+    def find_all(self) -> list[User]: ...
