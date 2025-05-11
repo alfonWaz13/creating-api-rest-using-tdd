@@ -1,12 +1,12 @@
 from expects import expect, equal
 
-from src.domain.user import User
 from src.infraestructure.in_memory.users_repository import InMemoryUsersRepository
+from tests.unit.domain.user_mother import UserMother
 
 
 class TestInMemoryUserRepository:
     def test_save_user(self) -> None:
-        user = User(id="123", name="John", age=20)
+        user = UserMother.get()
         repository = InMemoryUsersRepository()
 
         repository.save(user)

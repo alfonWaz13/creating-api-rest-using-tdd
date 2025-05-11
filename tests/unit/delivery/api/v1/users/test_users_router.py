@@ -1,5 +1,3 @@
-import uuid
-
 from fastapi.testclient import TestClient
 from http.client import CREATED
 
@@ -12,18 +10,13 @@ from src.use_cases.commands.create_user_command import (
     CreateUserCommand,
     CreateUserCommandHandler,
 )
-from src.domain.user import User
 from src.delivery.api.v1.users.users_router import _get_create_user_command_handler
+from tests.unit.domain.user_mother import UserMother
 
 
 class TestUsersRouter:
     def test_create_user(self) -> None:
-        name = "Peter"
-        age = 42
-        user_id = str(uuid.uuid4())
-
-        payload = {"id": user_id, "name": name, "age": age}
-        user = User(id=user_id, name=name, age=age)
+        user = UserMother.get()
 
         command = CreateUserCommand(user)
         client = TestClient(app)
@@ -31,7 +24,7 @@ class TestUsersRouter:
 
         app.dependency_overrides[_get_create_user_command_handler] = lambda: handler
 
-        response = client.post("/api/v1/users", json=payload)
+        response = client.post("/api/v1/users", json=user.to_dict())
 
         expect(response.status_code).to(equal(CREATED))
         expect(handler.execute).to(have_been_called_with(command))
