@@ -1,3 +1,5 @@
+import uuid
+
 from fastapi.testclient import TestClient
 from http.client import CREATED
 
@@ -18,9 +20,10 @@ class TestUsersRouter:
     def test_create_user(self) -> None:
         name = "Peter"
         age = 42
+        user_id = str(uuid.uuid4())
 
-        payload = {"name": name, "age": age}
-        user = User(name=name, age=age)
+        payload = {"id": user_id, "name": name, "age": age}
+        user = User(id=user_id, name=name, age=age)
 
         command = CreateUserCommand(user)
         client = TestClient(app)

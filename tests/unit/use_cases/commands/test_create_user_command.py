@@ -12,7 +12,7 @@ from src.use_cases.commands.create_user_command import (
 
 class TestCreateUserCommandHandler:
     def test_create_user_command_handler(self) -> None:
-        user = User(name="Jhon", age=20)
+        user = User(id="123", name="Jhon", age=20)
         command = CreateUserCommand(user)
         users_repository = Mimic(Spy, InMemoryUsersRepository)
         handler = CreateUserCommandHandler(users_repository)

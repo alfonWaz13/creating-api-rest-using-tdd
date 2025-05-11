@@ -6,7 +6,7 @@ from src.infraestructure.in_memory.users_repository import InMemoryUsersReposito
 
 class TestInMemoryUserRepository:
     def test_save_user(self) -> None:
-        user = User(name="John", age=20)
+        user = User(id="123", name="John", age=20)
         repository = InMemoryUsersRepository()
 
         repository.save(user)
