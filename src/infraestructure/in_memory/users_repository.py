@@ -11,3 +11,5 @@ class InMemoryUsersRepository(UsersRepository):
 
     def find_all(self) -> list[User]:
         return list(self._users.values())
+
+    def find_one(self, user_id: str) -> None: ...

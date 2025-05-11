@@ -14,10 +14,15 @@ from src.use_cases.commands.create_user_command import (
 from src.delivery.api.v1.users.users_router import (
     _get_create_user_command_handler,
     _get_find_all_users_query_handler,
+    _get_find_one_user_query_handler,
 )
 from src.use_cases.queries.find_all_users_query import (
     FindAllUsersQueryHandler,
     FindAllUsersQueryResponse,
+)
+from src.use_cases.queries.find_one_user_query import (
+    FindOneUserQueryHandler,
+    FindOneUserQueryResponse,
 )
 from tests.unit.domain.user_mother import UserMother
 
@@ -51,3 +56,15 @@ class TestUsersRouter:
 
         expect(response.status_code).to(equal(OK))
         expect(response.json()).to(equal({"users": [user.to_dict()]}))
+
+    def test_find_one_user(self, client: TestClient) -> None:
+        user = UserMother.get()
+        with Mimic(Stub, FindOneUserQueryHandler) as handler:
+            query_response = FindOneUserQueryResponse(user=user)
+            handler.execute(user.id).returns(query_response)
+        app.dependency_overrides[_get_find_one_user_query_handler] = lambda: handler
+
+        response = client.get(f"/api/v1/users/{user.id}")
+
+        expect(response.status_code).to(equal(OK))
+        expect(response.json()).to(equal(user.to_dict()))
