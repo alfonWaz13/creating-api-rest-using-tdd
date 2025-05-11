@@ -10,7 +10,10 @@ from src.use_cases.commands.create_user_command import (
     CreateUserCommand,
 )
 from src.use_cases.queries.find_all_users_query import FindAllUsersQueryHandler
-from src.use_cases.queries.find_one_user_query import FindOneUserQueryHandler
+from src.use_cases.queries.find_one_user_query import (
+    FindOneUserQueryHandler,
+    FindOneUserQuery,
+)
 
 users_router = APIRouter()
 users_repository = InMemoryUsersRepository()
@@ -57,5 +60,6 @@ def find_user(
     user_id: str,
     handler: FindOneUserQueryHandler = Depends(_get_find_one_user_query_handler),
 ) -> UserResponse:
-    response = handler.execute(user_id=user_id)
+    handler_query = FindOneUserQuery(user_id=user_id)
+    response = handler.execute(query=handler_query)
     return UserResponse(**response.user.to_dict())

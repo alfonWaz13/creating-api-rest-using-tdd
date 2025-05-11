@@ -23,6 +23,7 @@ from src.use_cases.queries.find_all_users_query import (
 from src.use_cases.queries.find_one_user_query import (
     FindOneUserQueryHandler,
     FindOneUserQueryResponse,
+    FindOneUserQuery,
 )
 from tests.unit.domain.user_mother import UserMother
 
@@ -60,8 +61,9 @@ class TestUsersRouter:
     def test_find_one_user(self, client: TestClient) -> None:
         user = UserMother.get()
         with Mimic(Stub, FindOneUserQueryHandler) as handler:
+            handler_query = FindOneUserQuery(user.id)
             query_response = FindOneUserQueryResponse(user=user)
-            handler.execute(user.id).returns(query_response)
+            handler.execute(handler_query).returns(query_response)
         app.dependency_overrides[_get_find_one_user_query_handler] = lambda: handler
 
         response = client.get(f"/api/v1/users/{user.id}")
