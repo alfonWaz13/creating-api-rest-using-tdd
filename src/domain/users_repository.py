@@ -12,3 +12,6 @@ class UsersRepository(ABC):
 
     @abstractmethod
     def find_by_id(self, user_id: str) -> User: ...
+
+    @abstractmethod
+    def update(self, user: User) -> User: ...
