@@ -15,6 +15,12 @@ from src.delivery.api.v1.users.users_router import (
     _get_create_user_command_handler,
     _get_find_all_users_query_handler,
     _get_find_one_user_query_handler,
+    _get_update_user_command_handler,
+)
+from src.use_cases.commands.update_user_command import (
+    UpdateUserCommandResponse,
+    UpdateUserCommandHandler,
+    UpdateUserCommand,
 )
 from src.use_cases.queries.find_all_users_query import (
     FindAllUsersQueryHandler,
@@ -70,3 +76,20 @@ class TestUsersRouter:
 
         expect(response.status_code).to(equal(OK))
         expect(response.json()).to(equal(user.to_dict()))
+
+    def test_update_user(self, client: TestClient) -> None:
+        user = UserMother.get()
+        with Mimic(Stub, UpdateUserCommandHandler) as handler:
+            command_response = UpdateUserCommandResponse(user=user)
+            command = UpdateUserCommand(user=user)
+            handler.execute(command).returns(command_response)
+        app.dependency_overrides[_get_update_user_command_handler] = lambda: handler
+
+        response = client.put(
+            f"/api/v1/users/{user.id}", json={"name": user.name, "age": user.age}
+        )
+
+        expect(response.status_code).to(equal(OK))
+        expect(response.json()).to(
+            equal({"id": user.id, "name": user.name, "age": user.age})
+        )
