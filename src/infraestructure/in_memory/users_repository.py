@@ -16,4 +16,5 @@ class InMemoryUsersRepository(UsersRepository):
         return self._users[user_id]
 
     def update(self, user: User) -> User:
+        self._users[user.id] = user
         return user
