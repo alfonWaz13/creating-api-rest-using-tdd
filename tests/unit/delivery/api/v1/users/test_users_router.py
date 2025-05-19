@@ -1,6 +1,6 @@
 import pytest
 from fastapi.testclient import TestClient
-from http.client import CREATED, OK
+from http.client import CREATED, OK, NO_CONTENT
 
 from expects import expect, equal
 from doublex import Spy, Mimic, Stub
@@ -16,6 +16,11 @@ from src.delivery.api.v1.users.users_router import (
     _get_find_all_users_query_handler,
     _get_find_one_user_query_handler,
     _get_update_user_command_handler,
+    _get_delete_user_command_handler,
+)
+from src.use_cases.commands.delete_user_command import (
+    DeleteUserCommandHandler,
+    DeleteUserCommand,
 )
 from src.use_cases.commands.update_user_command import (
     UpdateUserCommandResponse,
@@ -93,3 +98,14 @@ class TestUsersRouter:
         expect(response.json()).to(
             equal({"id": user.id, "name": user.name, "age": user.age})
         )
+
+    def test_delete_user(self, client: TestClient) -> None:
+        user_id = "id0"
+        command = DeleteUserCommand(user_id)
+        handler = Mimic(Spy, DeleteUserCommandHandler)
+        app.dependency_overrides[_get_delete_user_command_handler] = lambda: handler
+
+        response = client.delete(f"/api/v1/users/{user_id}")
+
+        expect(response.status_code).to(equal(NO_CONTENT))
+        expect(handler.execute).to(have_been_called_with(command))
