@@ -20,4 +20,4 @@ class InMemoryUsersRepository(UsersRepository):
         return user
 
     def delete(self, user_id: str) -> None:
-        raise NotImplementedError()
+        self._users.pop(user_id)

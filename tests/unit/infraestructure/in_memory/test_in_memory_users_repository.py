@@ -45,3 +45,13 @@ class TestInMemoryUserRepository:
         users = repository.find_all()
 
         expect(users).to(equal([updated_user]))
+
+    def test_save_and_delete_user(self) -> None:
+        user = UserMother.get()
+        repository = InMemoryUsersRepository()
+        repository.save(user)
+
+        expect(repository.find_all()).to(equal([user]))
+
+        repository.delete(user.id)
+        expect(repository.find_all()).to(equal([]))
